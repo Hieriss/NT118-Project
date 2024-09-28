@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity_sign_up">
+    android:background="@color/main"
+    tools:context=".SignUp">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -85,7 +86,7 @@
                     android:layout_width="330dp"
                     android:layout_height="50dp"
                     android:layout_margin="10dp"
-                    android:drawableStart="@drawable/user"
+                    android:drawableStart="@drawable/key"
                     android:drawablePadding="16dp"
                     android:ems="10"
                     android:hint="confirm password"
@@ -103,7 +104,7 @@
                     android:layout_width="330dp"
                     android:layout_height="50dp"
                     android:layout_margin="10dp"
-                    android:drawableStart="@drawable/user"
+                    android:drawableStart="@drawable/email"
                     android:drawablePadding="16dp"
                     android:ems="10"
                     android:hint="email"
@@ -121,7 +122,7 @@
                     android:layout_width="330dp"
                     android:layout_height="50dp"
                     android:layout_margin="10dp"
-                    android:drawableStart="@drawable/user"
+                    android:drawableStart="@drawable/phone"
                     android:drawablePadding="16dp"
                     android:ems="10"
                     android:hint="phone"
@@ -135,7 +136,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/signup_email" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/signin_button"
+                    android:id="@+id/signup_button"
                     android:layout_width="230dp"
                     android:layout_height="50dp"
                     android:layout_marginBottom="60dp"

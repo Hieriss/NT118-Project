@@ -1,6 +1,10 @@
 package com.example.prj;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +23,24 @@ public class SignUp extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        Button buttonsignup = findViewById(R.id.signup_button);
+        buttonsignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), SignIn.class);
+                view.getContext().startActivity(intent);
+            }
+        });
+
+        TextView switchtosignin = findViewById(R.id.signup_text3);
+        switchtosignin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), SignIn.class);
+                view.getContext().startActivity(intent);
+            }
         });
     }
 }
