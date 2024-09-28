@@ -8,7 +8,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class activity_sign_up extends AppCompatActivity {
+public class SignUp extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
