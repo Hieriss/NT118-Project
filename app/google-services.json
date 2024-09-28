@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "603610624008",
+    "project_id": "nt118-prj",
+    "storage_bucket": "nt118-prj.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:603610624008:android:c27bc90079488b6142a1bd",
+        "android_client_info": {
+          "package_name": "com.example.prj"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6wtu4PUpkg1XV7hFk-7UWGt-krWZ_yiI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
