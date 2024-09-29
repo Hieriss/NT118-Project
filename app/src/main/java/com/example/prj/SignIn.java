@@ -69,7 +69,7 @@ public class SignIn extends AppCompatActivity {
                     signinUsername.setError(null);
                     String passwordFromDB = snapshot.child(userUsername).child("password").getValue(String.class);
 
-                    if (!Objects.equals(passwordFromDB, userPassword)){
+                    if (Objects.equals(passwordFromDB, userPassword)){
                         signinUsername.setError(null);
                         Intent intent = new Intent(SignIn.this, MainPage.class);
                         startActivity(intent);
