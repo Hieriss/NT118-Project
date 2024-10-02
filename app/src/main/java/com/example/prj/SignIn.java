@@ -169,10 +169,10 @@ public class SignIn extends AppCompatActivity {
             }
         });
 
-        TextView usernameForm = findViewById(R.id.signin_text5);
-        TextView qrcodeForm = findViewById(R.id.signin_text4);
+        Button usernameForm;
+        Button qrcodeForm;
 
-        qrcodeForm = findViewById(R.id.signin_text4);
+        qrcodeForm = findViewById(R.id.qrcode_button);
         qrcodeForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -183,7 +183,7 @@ public class SignIn extends AppCompatActivity {
             }
         });
 
-        usernameForm = findViewById(R.id.signin_text5);
+        usernameForm = findViewById(R.id.username_button);
         usernameForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
