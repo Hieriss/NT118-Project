@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -22,14 +23,19 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
+import java.util.UUID;
+
+import android.graphics.Bitmap;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 
 public class SignIn extends AppCompatActivity {
 
     EditText signinUsername, signinPassord;
     Button signinButton;
     TextView switchtosignupText;
-    FirebaseDatabase database;
-    DatabaseReference reference;
 
     public Boolean validateUsername(){
         String val = signinUsername.getText().toString();
@@ -46,7 +52,7 @@ public class SignIn extends AppCompatActivity {
     public Boolean validatePassword(){
         String val = signinPassord.getText().toString();
         if (val.isEmpty()){
-            signinPassord.setError("Username can't be empty");
+            signinPassord.setError("Password can't be empty");
             return false;
         }
         else {
@@ -92,6 +98,25 @@ public class SignIn extends AppCompatActivity {
         });
     }
 
+    public Bitmap generateQRCode(String sessionId) {
+        QRCodeWriter writer = new QRCodeWriter();
+        try {
+            BitMatrix bitMatrix = writer.encode(sessionId, BarcodeFormat.QR_CODE, 512, 512);
+            int width = bitMatrix.getWidth();
+            int height = bitMatrix.getHeight();
+            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
+                }
+            }
+            return bmp;
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +127,16 @@ public class SignIn extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        ImageView qrCodeImage = findViewById(R.id.qrCodeImageView);
+        String sessionId = UUID.randomUUID().toString();  // Generate a unique session ID
+        Bitmap qrCodeBitmap = generateQRCode(sessionId);
+        qrCodeImage.setImageBitmap(qrCodeBitmap);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference qrCodeRef = database.getReference("qrCodes");
+
+        qrCodeRef.child(sessionId).setValue("waiting_for_login");
 
         signinUsername = findViewById(R.id.signin_username);
         signinPassord = findViewById(R.id.signin_password);
