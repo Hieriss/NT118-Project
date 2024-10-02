@@ -33,10 +33,12 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 public class SignIn extends AppCompatActivity {
 
+    // Sign in definition
     EditText signinUsername, signinPassord;
     Button signinButton;
     TextView switchtosignupText;
 
+    // Validate username and password
     public Boolean validateUsername(){
         String val = signinUsername.getText().toString();
         if (val.isEmpty()){
@@ -61,6 +63,7 @@ public class SignIn extends AppCompatActivity {
         }
     }
 
+    // Check if the user username and password from database
     public void checkUser(){
         String userUsername = signinUsername.getText().toString().trim();
         String userPassword = signinPassord.getText().toString().trim();
@@ -98,6 +101,7 @@ public class SignIn extends AppCompatActivity {
         });
     }
 
+    // QR Code Generation Function
     public Bitmap generateQRCode(String sessionId) {
         QRCodeWriter writer = new QRCodeWriter();
         try {
@@ -128,6 +132,7 @@ public class SignIn extends AppCompatActivity {
             return insets;
         });
 
+        //QR Code Generation (displayed on the screen)
         ImageView qrCodeImage = findViewById(R.id.qrCodeImageView);
         String sessionId = UUID.randomUUID().toString();  // Generate a unique session ID
         Bitmap qrCodeBitmap = generateQRCode(sessionId);
@@ -138,6 +143,7 @@ public class SignIn extends AppCompatActivity {
 
         qrCodeRef.child(sessionId).setValue("waiting_for_login");
 
+        // Sign in
         signinUsername = findViewById(R.id.signin_username);
         signinPassord = findViewById(R.id.signin_password);
 
@@ -153,12 +159,38 @@ public class SignIn extends AppCompatActivity {
             }
         });
 
+        // Switch to sign up page
         switchtosignupText = findViewById(R.id.signin_text3);
         switchtosignupText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), SignUp.class);
                 view.getContext().startActivity(intent);
+            }
+        });
+
+        TextView usernameForm = findViewById(R.id.signin_text5);
+        TextView qrcodeForm = findViewById(R.id.signin_text4);
+
+        qrcodeForm = findViewById(R.id.signin_text4);
+        qrcodeForm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                qrCodeImage.setVisibility(View.VISIBLE);
+                signinUsername.setVisibility(View.GONE);
+                signinPassord.setVisibility(View.GONE);
+                signinButton.setVisibility(View.GONE);
+            }
+        });
+
+        usernameForm = findViewById(R.id.signin_text5);
+        usernameForm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                qrCodeImage.setVisibility(View.GONE);
+                signinUsername.setVisibility(View.VISIBLE);
+                signinPassord.setVisibility(View.VISIBLE);
+                signinButton.setVisibility(View.VISIBLE);
             }
         });
     }
