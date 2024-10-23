@@ -191,6 +191,7 @@ public class SignIn extends AppCompatActivity {
     private void checkUser() {
         String userUsername = signinUsername.getText().toString().trim();
         String userPassword = signinPassword.getText().toString().trim();
+        String hashedPassword = Encrypt.hashPassword(userPassword);
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("user");
         Query checkUserDatabase = reference.orderByChild("username").equalTo(userUsername);
@@ -202,7 +203,7 @@ public class SignIn extends AppCompatActivity {
                     signinUsername.setError(null);
                     String passwordFromDB = snapshot.child(userUsername).child("password").getValue(String.class);
 
-                    if (Objects.equals(passwordFromDB, userPassword)) {
+                    if (Objects.equals(passwordFromDB, hashedPassword)) {
                         signinUsername.setError(null);
                         Intent intent = new Intent(SignIn.this, MainPage.class);
                         intent.putExtra("USERNAME", userUsername);

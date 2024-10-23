@@ -46,44 +46,14 @@ public class SignUp extends AppCompatActivity {
         signupPhone = findViewById(R.id.signup_phone);
 
         signupButton = findViewById(R.id.signup_button);
+
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                database = FirebaseDatabase.getInstance();
-                reference = database.getReference("user");
-
-                String username = signupUsername.getText().toString();
-                String password = signupPassword.getText().toString();
-                String confirmpassword = signupConfirmpassword.getText().toString();
-                String email = signupEmail.getText().toString();
-                String phone = signupPhone.getText().toString();
-
-                if(TextUtils.isEmpty(username)){
-                    Toast.makeText(SignUp.this, "Username can't be empty", Toast.LENGTH_SHORT).show();
-                }
-                if(TextUtils.isEmpty(password)){
-                    Toast.makeText(SignUp.this, "Password can't be empty", Toast.LENGTH_SHORT).show();
-                }
-                if(TextUtils.isEmpty(confirmpassword)){
-                    Toast.makeText(SignUp.this, "Confirm password can't be empty", Toast.LENGTH_SHORT).show();
-                }
-                if(TextUtils.isEmpty(email)){
-                    Toast.makeText(SignUp.this, "Email can't be empty", Toast.LENGTH_SHORT).show();
-                }
-                if(TextUtils.isEmpty(phone)){
-                    Toast.makeText(SignUp.this, "Phone Number can't be empty", Toast.LENGTH_SHORT).show();
-                }
-
-                if (password.equals(confirmpassword)){
-                    HelperClass helperClass = new HelperClass(username, password, email, phone);
-                    reference.child(username).setValue(helperClass);
-
-                    Toast.makeText(SignUp.this, "Signed up successfully!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(view.getContext(), SignIn.class);
-                    startActivity(intent);
-                }
-                else {
-                    Toast.makeText(SignUp.this, "Password didn't match", Toast.LENGTH_SHORT).show();
+                if (!validateUsername() | !validatePassword() | !validateConfirmPassword() | !validateEmail() | !validatePhone()) {
+                    return;
+                } else {
+                    checkInfo();
                 }
             }
         });
@@ -96,5 +66,94 @@ public class SignUp extends AppCompatActivity {
                 view.getContext().startActivity(intent);
             }
         });
+    }
+
+    private Boolean validateUsername() {
+        String val = signupUsername.getText().toString().trim();
+        if (val.isEmpty()) {
+            signupUsername.setError("Username can't be empty");
+            return false;
+        } else {
+            signupUsername.setError(null);
+            return true;
+        }
+    }
+
+    private Boolean validatePassword() {
+        String val = signupPassword.getText().toString().trim();
+        if (val.isEmpty()) {
+            signupPassword.setError("Password can't be empty");
+            return false;
+        } else if (val.length() < 8) {
+            signupPassword.setError("Password must be at least 8 characters long");
+            return false;
+        } else {
+            signupPassword.setError(null);
+            return true;
+        }
+    }
+
+    private Boolean validateConfirmPassword() {
+        String val = signupConfirmpassword.getText().toString().trim();
+        String password = signupPassword.getText().toString().trim();
+        if (val.isEmpty()) {
+            signupConfirmpassword.setError("Confirm password can't be empty");
+            return false;
+        } else if (!val.equals(password)) {
+            signupConfirmpassword.setError("Password didn't match");
+            return false;
+        } else {
+            signupConfirmpassword.setError(null);
+            return true;
+        }
+    }
+
+    private Boolean validateEmail() {
+        String val = signupEmail.getText().toString().trim();
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        if (val.isEmpty()) {
+            signupEmail.setError("Email can't be empty");
+            return false;
+        } else if (!val.matches(emailPattern)) {
+            signupEmail.setError("Invalid email address");
+            return false;
+        } else {
+            signupEmail.setError(null);
+            return true;
+        }
+    }
+
+    private Boolean validatePhone() {
+        String val = signupPhone.getText().toString().trim();
+        String phonePattern = "[0-9]{10}";
+        if (val.isEmpty()) {
+            signupPhone.setError("Phone Number can't be empty");
+            return false;
+        } else if (!val.matches(phonePattern)) {
+            signupPhone.setError("Phone Number must be 10 digits long");
+            return false;
+        } else {
+            signupPhone.setError(null);
+            return true;
+        }
+    }
+
+    private void checkInfo() {
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference("user");
+
+        String username = signupUsername.getText().toString();
+        String password = signupPassword.getText().toString();
+        String confirmpassword = signupConfirmpassword.getText().toString();
+        String email = signupEmail.getText().toString();
+        String phone = signupPhone.getText().toString();
+
+        String hashedPassword = Encrypt.hashPassword(password);
+        HelperClass helperClass = new HelperClass(username, hashedPassword, email, phone);
+        reference.child(username).setValue(helperClass);
+
+        Toast.makeText(SignUp.this, "Signed up successfully!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(SignUp.this, SignIn.class);
+        startActivity(intent);
     }
 }
