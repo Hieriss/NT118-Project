@@ -1,19 +1,18 @@
 package com.example.prj;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,88 +20,131 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Objects;
-import java.util.UUID;
-
-import android.graphics.Bitmap;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+import java.util.Objects;
+import java.util.UUID;
+
 public class SignIn extends AppCompatActivity {
 
-    // Sign in definition
-    EditText signinUsername, signinPassord;
-    Button signinButton;
-    TextView switchtosignupText;
+    // UI components
+    EditText signinUsername, signinPassword;
+    Button signinButton, usernameForm, qrcodeForm;
+    ImageView qrCodeImageView;
+    TextView switchToSignUpText;
 
-    // Validate username and password
-    public Boolean validateUsername(){
-        String val = signinUsername.getText().toString();
-        if (val.isEmpty()){
-            signinUsername.setError("Username can't be empty");
-            return false;
-        }
-        else {
-            signinUsername.setError(null);
-            return true;
-        }
-    }
+    DatabaseReference databaseReference;
 
-    public Boolean validatePassword(){
-        String val = signinPassord.getText().toString();
-        if (val.isEmpty()){
-            signinPassord.setError("Password can't be empty");
-            return false;
-        }
-        else {
-            signinPassord.setError(null);
-            return true;
-        }
-    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sign_in);
 
-    // Check if the user username and password from database
-    public void checkUser(){
-        String userUsername = signinUsername.getText().toString().trim();
-        String userPassword = signinPassord.getText().toString().trim();
+        // Initialize Firebase Database reference
+        databaseReference = FirebaseDatabase.getInstance().getReference("qrCodes");
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("user");
-        Query checkUserDatabase = reference.orderByChild("username").equalTo(userUsername);
+        // UI Initialization
+        signinUsername = findViewById(R.id.signin_username);
+        signinPassword = findViewById(R.id.signin_password);
+        signinButton = findViewById(R.id.signin_button);
+        qrCodeImageView = findViewById(R.id.qrCodeImageView);
+        qrcodeForm = findViewById(R.id.qrcode_button);
+        usernameForm = findViewById(R.id.username_button);
+        switchToSignUpText = findViewById(R.id.signin_text3);
 
-        checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        // QR Code Button Handler (Generate QR Code)
+        qrcodeForm.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    signinUsername.setError(null);
-                    String passwordFromDB = snapshot.child(userUsername).child("password").getValue(String.class);
+            public void onClick(View view) {
+                qrCodeImageView.setVisibility(View.VISIBLE);
+                signinUsername.setVisibility(View.GONE);
+                signinPassword.setVisibility(View.GONE);
+                signinButton.setVisibility(View.GONE);
 
-                    if (Objects.equals(passwordFromDB, userPassword)){
-                        signinUsername.setError(null);
-                        Intent intent = new Intent(SignIn.this, MainPage.class);
-                        startActivity(intent);
+                // Change the background of the button
+                qrcodeForm.setBackgroundResource(R.drawable.qr_username_choosen_background);
+                usernameForm.setBackgroundResource(R.drawable.qr_username_not_choosen_background);
+
+                // Generate a session ID
+                String sessionId = UUID.randomUUID().toString();
+                Bitmap qrCodeBitmap = generateQRCode(sessionId);
+                qrCodeImageView.setImageBitmap(qrCodeBitmap);
+
+                // Save the session ID to Firebase
+                databaseReference.child(sessionId).setValue("waiting_for_login");
+
+                // Listen for changes in the session ID status
+                databaseReference.child(sessionId).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String status = snapshot.child("status").getValue(String.class);
+                        if ("logged_in".equals(status)) {
+                            // Retrieve the user credentials
+                            String usernameqr = snapshot.child("username").getValue(String.class);
+
+                            // Save the credentials in SharedPreferences
+                            /*SharedPreferences preferences = getSharedPreferences("user_session", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString("username", username);
+                            editor.apply();*/
+
+                            // Login successful
+                            Intent intent = new Intent(SignIn.this, MainPage.class);
+                            intent.putExtra("USERNAMEQR", usernameqr);
+                            startActivity(intent);
+                            finish();
+                        }
                     }
-                    else {
-                        signinPassord.setError("Invalid Credentials");
-                        signinPassord.requestFocus();
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(SignIn.this, "Database Error", Toast.LENGTH_SHORT).show();
                     }
-                }
-                else {
-                    signinUsername.setError("Username didn't exist");
-                    signinUsername.requestFocus();
+                });
+            }
+        });
+
+        // Username and Password Form Button Handler
+        usernameForm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                qrCodeImageView.setVisibility(View.GONE);
+                signinUsername.setVisibility(View.VISIBLE);
+                signinPassword.setVisibility(View.VISIBLE);
+                signinButton.setVisibility(View.VISIBLE);
+
+                usernameForm.setBackgroundResource(R.drawable.qr_username_choosen_background);
+                qrcodeForm.setBackgroundResource(R.drawable.qr_username_not_choosen_background);
+            }
+        });
+
+        // Sign-in Button Handler (Username/Password)
+        signinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!validateUsername() | !validatePassword()) {
+                    return;
+                } else {
+                    checkUser();
                 }
             }
+        });
 
+        // Switch to Sign-Up
+        switchToSignUpText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onClick(View view) {
+                Intent intent = new Intent(SignIn.this, SignUp.class);
+                startActivity(intent);
             }
         });
     }
 
     // QR Code Generation Function
-    public Bitmap generateQRCode(String sessionId) {
+    private Bitmap generateQRCode(String sessionId) {
         QRCodeWriter writer = new QRCodeWriter();
         try {
             BitMatrix bitMatrix = writer.encode(sessionId, BarcodeFormat.QR_CODE, 512, 512);
@@ -121,76 +163,63 @@ public class SignIn extends AppCompatActivity {
         return null;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_sign_in);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+    // Username Validation
+    private Boolean validateUsername() {
+        String val = signinUsername.getText().toString().trim();
+        if (val.isEmpty()) {
+            signinUsername.setError("Username can't be empty");
+            return false;
+        } else {
+            signinUsername.setError(null);
+            return true;
+        }
+    }
 
-        //QR Code Generation (displayed on the screen)
-        ImageView qrCodeImage = findViewById(R.id.qrCodeImageView);
-        String sessionId = UUID.randomUUID().toString();  // Generate a unique session ID
-        Bitmap qrCodeBitmap = generateQRCode(sessionId);
-        qrCodeImage.setImageBitmap(qrCodeBitmap);
+    // Password Validation
+    private Boolean validatePassword() {
+        String val = signinPassword.getText().toString().trim();
+        if (val.isEmpty()) {
+            signinPassword.setError("Password can't be empty");
+            return false;
+        } else {
+            signinPassword.setError(null);
+            return true;
+        }
+    }
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference qrCodeRef = database.getReference("qrCodes");
+    // Check User Credentials in Firebase
+    private void checkUser() {
+        String userUsername = signinUsername.getText().toString().trim();
+        String userPassword = signinPassword.getText().toString().trim();
 
-        qrCodeRef.child(sessionId).setValue("waiting_for_login");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("user");
+        Query checkUserDatabase = reference.orderByChild("username").equalTo(userUsername);
 
-        // Sign in
-        signinUsername = findViewById(R.id.signin_username);
-        signinPassord = findViewById(R.id.signin_password);
-
-        signinButton = findViewById(R.id.signin_button);
-        signinButton.setOnClickListener(new View.OnClickListener() {
+        checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View view) {
-                if (!validateUsername() | !validatePassword()){
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    signinUsername.setError(null);
+                    String passwordFromDB = snapshot.child(userUsername).child("password").getValue(String.class);
+
+                    if (Objects.equals(passwordFromDB, userPassword)) {
+                        signinUsername.setError(null);
+                        Intent intent = new Intent(SignIn.this, MainPage.class);
+                        intent.putExtra("USERNAME", userUsername);
+                        startActivity(intent);
+                    } else {
+                        signinPassword.setError("Invalid Credentials");
+                        signinPassword.requestFocus();
+                    }
+                } else {
+                    signinUsername.setError("Username doesn't exist");
+                    signinUsername.requestFocus();
                 }
-                else {
-                    checkUser();
-                }
             }
-        });
 
-        // Switch to sign up page
-        switchtosignupText = findViewById(R.id.signin_text3);
-        switchtosignupText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), SignUp.class);
-                view.getContext().startActivity(intent);
-            }
-        });
-
-        Button usernameForm;
-        Button qrcodeForm;
-
-        qrcodeForm = findViewById(R.id.qrcode_button);
-        qrcodeForm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                qrCodeImage.setVisibility(View.VISIBLE);
-                signinUsername.setVisibility(View.GONE);
-                signinPassord.setVisibility(View.GONE);
-                signinButton.setVisibility(View.GONE);
-            }
-        });
-
-        usernameForm = findViewById(R.id.username_button);
-        usernameForm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                qrCodeImage.setVisibility(View.GONE);
-                signinUsername.setVisibility(View.VISIBLE);
-                signinPassord.setVisibility(View.VISIBLE);
-                signinButton.setVisibility(View.VISIBLE);
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(SignIn.this, "Database Error", Toast.LENGTH_SHORT).show();
             }
         });
     }

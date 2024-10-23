@@ -16,35 +16,95 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="5"
+            android:layout_weight="6"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/mainpage_text"
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/mainpage_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="-10dp"
+                    android:fontFamily="@font/grandstander_semi_bold"
+                    android:text="Echinoidea"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/logout_button"
+                    android:layout_width="230dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="60dp"
+                    android:background="@drawable/signin_button_background"
+                    android:text="Test Log Out"
+                    android:visibility="gone"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="-10dp"
-                android:layout_marginStart="20dp"
-                android:text="Echinoidea"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:fontFamily="@font/grandstander_semi_bold"
-                android:textSize="40sp"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/logout_button"
-                android:layout_width="230dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="60dp"
-                android:background="@drawable/signin_button_background"
-                android:text="Test Log Out"
-                android:visibility="gone"
-                android:textAllCaps="false"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/imageView7"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        app:srcCompat="@drawable/white_scan" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/scan_button"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@android:color/transparent"
+                        android:text=""
+                        android:clickable="true"
+                        android:focusable="true" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/imageView8"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        app:srcCompat="@drawable/white_setting" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/setting_button"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@android:color/transparent"
+                        android:text=""
+                        android:clickable="true"
+                        android:focusable="true" />
+                </RelativeLayout>
+            </LinearLayout>
+
         </LinearLayout>
 
         <RelativeLayout
@@ -80,8 +140,8 @@
 
                         <ImageView
                             android:id="@+id/imageView2"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
                             android:layout_gravity="center"
                             android:layout_marginStart="30dp"
                             android:layout_marginEnd="20dp"
@@ -100,8 +160,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/grandstander_medium"
-                                android:text="Tran Minh Hieu"
-                                android:textSize="20sp" />
+                                android:text=""
+                                android:textSize="16sp" />
 
                             <TextView
                                 android:id="@+id/amount_text"
@@ -111,7 +171,7 @@
                                 android:layout_marginBottom="5dp"
                                 android:fontFamily="@font/grandstander_regular"
                                 android:text="Today detected: 0"
-                                android:textSize="20sp" />
+                                android:textSize="16sp" />
 
                             <TextView
                                 android:id="@+id/title"
@@ -119,7 +179,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/grandstander_regular"
                                 android:text="Pro-detector"
-                                android:textSize="20sp" />
+                                android:textSize="16sp" />
                         </LinearLayout>
                     </LinearLayout>
                 </RelativeLayout>
@@ -130,113 +190,168 @@
                     android:layout_margin="20dp"
                     android:orientation="horizontal">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
 
-                        <ImageView
-                            android:id="@+id/imageView3"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            app:srcCompat="@drawable/medal" />
-
-                        <TextView
-                            android:id="@+id/textView"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/grandstander_regular"
-                            android:text="Achievement"
-                            android:textAlignment="center"
-                            android:textSize="14sp" />
-                    </LinearLayout>
+                            android:orientation="vertical">
 
-                    <LinearLayout
+                            <ImageView
+                                android:id="@+id/imageView3"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                app:srcCompat="@drawable/medal" />
+
+                            <TextView
+                                android:id="@+id/textView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/grandstander_regular"
+                                android:text="Achievement"
+                                android:textAlignment="center"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/achievement_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:text=""
+                            android:clickable="true"
+                            android:focusable="true" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/imageView4"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                app:srcCompat="@drawable/notification" />
+
+                            <TextView
+                                android:id="@+id/textView2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/grandstander_regular"
+                                android:text="Notification"
+                                android:textAlignment="center"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/notification_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:text=""
+                            android:clickable="true"
+                            android:focusable="true" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="5dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:layout_weight="1">
 
-                        <ImageView
-                            android:id="@+id/imageView4"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            app:srcCompat="@drawable/notification" />
-
-                        <TextView
-                            android:id="@+id/textView2"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/grandstander_regular"
-                            android:text="Notification"
-                            android:textAlignment="center"
-                            android:textSize="14sp" />
+                            android:orientation="vertical">
 
-                    </LinearLayout>
+                            <ImageView
+                                android:id="@+id/imageView5"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                app:srcCompat="@drawable/file" />
 
-                    <LinearLayout
+                            <TextView
+                                android:id="@+id/textView3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/grandstander_regular"
+                                android:text="History Log"
+                                android:textAlignment="center"
+                                android:textSize="10sp" />
+                        </LinearLayout>
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/history_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:text=""
+                            android:clickable="true"
+                            android:focusable="true" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="5dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:layout_weight="1">
 
-                        <ImageView
-                            android:id="@+id/imageView5"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            app:srcCompat="@drawable/file" />
-
-                        <TextView
-                            android:id="@+id/textView3"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/grandstander_regular"
-                            android:text="History Log"
-                            android:textAlignment="center"
-                            android:textSize="14sp" />
-                    </LinearLayout>
+                            android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                            <ImageView
+                                android:id="@+id/imageView6"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                app:srcCompat="@drawable/user" />
 
-                        <ImageView
-                            android:id="@+id/imageView6"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            app:srcCompat="@drawable/user" />
+                            <TextView
+                                android:id="@+id/textView4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/grandstander_regular"
+                                android:text="Profile"
+                                android:textAlignment="center"
+                                android:textSize="10sp" />
+                        </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/textView4"
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/profile_button"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/grandstander_regular"
-                            android:text="Profile"
-                            android:textAlignment="center"
-                            android:textSize="14sp" />
-                    </LinearLayout>
+                            android:background="@android:color/transparent"
+                            android:text=""
+                            android:clickable="true"
+                            android:focusable="true" />
+                    </RelativeLayout>
 
                 </LinearLayout>
 
@@ -251,8 +366,8 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:layout_width="280dp"
-                android:layout_height="60dp"
+                android:layout_width="250dp"
+                android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="50dp"
@@ -267,8 +382,8 @@
 
                     <ImageView
                         android:id="@+id/button_icon"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_marginEnd="5dp"
                         android:src="@drawable/white_map" />
@@ -283,12 +398,12 @@
                         android:text="Open map"
                         android:textAllCaps="false"
                         android:textColor="#FFFFFF"
-                        android:textSize="24sp"
+                        android:textSize="20sp"
                         android:gravity="center" />
                 </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/openmap_button"
+                    android:id="@+id/map_button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent"

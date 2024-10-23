@@ -70,7 +70,7 @@
                             android:fontFamily="@font/grandstander_regular"
                             android:textColor="@color/black"
                             android:textColorHint="@color/black"
-                            android:textSize="22sp" />
+                            android:textSize="16sp" />
 
                         <EditText
                             android:id="@+id/signup_password"
@@ -86,7 +86,7 @@
                             android:fontFamily="@font/grandstander_regular"
                             android:textColor="@color/black"
                             android:textColorHint="@color/black"
-                            android:textSize="22sp" />
+                            android:textSize="16sp" />
 
                         <EditText
                             android:id="@+id/signup_confirmpassword"
@@ -102,7 +102,7 @@
                             android:fontFamily="@font/grandstander_regular"
                             android:textColor="@color/black"
                             android:textColorHint="@color/black"
-                            android:textSize="22sp" />
+                            android:textSize="16sp" />
 
                         <EditText
                             android:id="@+id/signup_email"
@@ -118,7 +118,7 @@
                             android:fontFamily="@font/grandstander_regular"
                             android:textColor="@color/black"
                             android:textColorHint="@color/black"
-                            android:textSize="22sp" />
+                            android:textSize="16sp" />
 
                         <EditText
                             android:id="@+id/signup_phone"
@@ -134,7 +134,7 @@
                             android:fontFamily="@font/grandstander_regular"
                             android:textColor="@color/black"
                             android:textColorHint="@color/black"
-                            android:textSize="22sp" />
+                            android:textSize="16sp" />
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/signup_button"
@@ -166,7 +166,7 @@
                             android:text="Already have an account?"
                             android:fontFamily="@font/grandstander_regular"
                             android:textAlignment="center"
-                            android:textSize="20sp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/signup_text3"
@@ -177,7 +177,7 @@
                             android:text="Sign In"
                             android:fontFamily="@font/grandstander_semi_bold"
                             android:textAlignment="center"
-                            android:textSize="20sp"
+                            android:textSize="16sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
